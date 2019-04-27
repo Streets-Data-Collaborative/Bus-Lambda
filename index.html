@@ -1,0 +1,86 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+ <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   crossorigin=""></script>
+   
+<title>geolocation</title>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+    <article>
+      <p>Finding your location: <span id="status">checking...</span></p>
+    </article>
+<script>
+function success(position) {
+  var s = document.querySelector('#status');
+
+  if (s.className == 'success') {
+    // not sure why we're hitting this twice in FF, I think it's to do with a cached result coming back
+    return;
+  }
+
+  s.innerHTML = "found you! "+position.coords.latitude+","+position.coords.longitude;
+  s.className = 'success';
+
+  var mapcanvas = document.createElement('div');
+  mapcanvas.id = 'mapcanvas';
+  mapcanvas.style.height = '400px';
+  mapcanvas.style.width = '560px';
+
+  document.querySelector('article').appendChild(mapcanvas);
+
+  // var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  // var myOptions = {
+  //   zoom: 15,
+  //   center: latlng,
+  //   mapTypeControl: false,
+  //   navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+  //   mapTypeId: google.maps.MapTypeId.ROADMAP
+  // };
+  
+  var lat = position.coords.latitude
+  var long = position.coords.longitude
+  var acc = position.coords.accuracy
+  var map = L.map('mapcanvas').setView([lat, long], 15);
+  
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'pk.eyJ1IjoidmlzaGVsYXIiLCJhIjoiY2p1dWo0NHNkMGkxZDQzbzEzc3RxZ3VqYyJ9.fFXSO7ymu5SHD5aO059Buw'
+  }).addTo(map);
+  
+  var circle = L.circle([lat, long], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: acc
+  }).addTo(map);
+  
+  var marker = L.marker([lat, long]).addTo(map);
+
+  // DISPLAYS MAP - COMMENT OUT map and marker code to remove MAP
+  // var map = new google.maps.Map(document.getElementById("mapcanvas"), myOptions);
+
+  // var marker = new google.maps.Marker({
+  //     position: latlng,
+  //     map: map,
+  //     title:"You are here! (at least within a "+position.coords.accuracy+" meter radius)"
+  // });
+}
+
+function error(msg) {
+  var s = document.querySelector('#status');
+  s.innerHTML = typeof msg == 'string' ? msg : "failed";
+  s.className = 'fail';
+
+  // console.log(arguments);
+}
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(success, error);
+} else {
+  error('not supported');
+}
+
+</script>
