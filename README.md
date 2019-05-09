@@ -30,7 +30,9 @@ This project combines the following to realize a low-cost kit to instrument any 
 
 ![ A $10 Raspberry Pi Zero is a fully-functional wifi-equipped computer capable of retrieving its location. ](https://static1.squarespace.com/static/59948729a803bbad877d588e/t/5997b872f14aa1178c60949c/1503115399348/raspberry-pi-zero-w-wireless-256x256.png?format=1500w)
 
-A $10 Raspberry Pi Zero is a fully-functional wifi-equipped computer capable of retrieving its location.
+The Raspberry Pi Zero W is a low-cost, wifi-equipped linux computer capable of retrieving its location without relying on dedicated GPS hardware. This is possible using Wifi Positioning System, a fairly simple concept that has been around for well over a decade and used by your cellphone to get its approximate location quickly. You try it out yourself by downloading this repo and executing the `locate_magic.sh` script.
+
+[Varun researched Wifi Positioning's application to Emergency response in a short paper during grad school](https://www.researchgate.net/publication/239807385_SPATIAL_ANNOTATION_USING_Wi-Fi_POSITIONING_SYSTEM)
 
 ![ A recent ride on a New York City bus using the Raspberry Pi device and Wifi-positioning to retrieve the bus's location. A citywide system can be built to develop real time bus schedule infrastructure at the fraction of what it costs today. ](https://static1.squarespace.com/static/59948729a803bbad877d588e/t/5997b8bdf14aa1178c609703/1503115491956/bustime.jpg?format=1500w)
 
@@ -45,13 +47,14 @@ A recent ride on a New York City bus using the $10 Raspberry Pi device and Wifi-
 - Please create an [issue](https://github.com/vr00n/Bus-Lambda/issues) if you would like to contribute to this project.
 
 
-## How
+## How (in theory)
+
 - **Device**: A simple, reliable, and weather resistant hardware that connects to the Internet, request its location from locationmagic.org, and sends its location `DEVICE_LOCATION` every "n" seconds to a cloud-hosted postgres database.
 - **Backend**: A `postgres database` with appropriate tables to receive real-time device data along with static bus stop and route data. A simple query should allow for the display of the required information to to be displayed on a static frontend page.
 - **Frontend**: A static single page application that can run on any smartphone. The page would request the user's current location and upon receiving it, send the `CLIENT_LOCATION` as a payload to an API endpoint.
 - **Endpoint**: An API endpoint that receives the `CLIENT_LOCATION` and returns top-n `DEVICE_LOCATIONs` closest to it at `TIME t` via a simple postgres spatial query. At the moment, we use AWS Lambda functions connected to an API Gateway to achieve this.
 
-## What
+## How (applied)
 
 ### locate_magic.sh (Device)
 This script will run on a Raspberry Pi and obtain its location by pinging WIFI routers around it and sending it to an external service called Location Magic maintained by Unwired Labs. 
