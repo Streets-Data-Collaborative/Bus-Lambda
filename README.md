@@ -42,24 +42,31 @@ A recent ride on a New York City bus using the $10 Raspberry Pi device and Wifi-
 - Lingyi Zhang
 - Xia Wang
 - Vishwajeet Shelar
+- Please create an [issue](https://github.com/vr00n/Bus-Lambda/issues) if you would like to contribute to this project.
 
 
 ## How
-- **Device**: Requires engineering simple, reliable, and resistant hardware that connects to the Internet, request its location from locationmagic.org, and sends `DEVICE_LOCATION` every 30 seconds to a cloud-hosted postgres database.
-- **Backend**: Requires the creation of a `postgres database` with appropriate table design and read/write permissions.
-- **Frontend**: A simple javascript single page application that is able to run on any smartphone. The page would request the user's location and upon receiving it, send the `CLIENT_LOCATION` as a payload to an API endpoint.
-- **Serverless logic**: AWS Lambda functions connected to an API Gateway that receive the `CLIENT_LOCATION` and issue a simple postgres spatial query that returns the `DEVICE_LOCATION` closest to it at `TIME t`
+- **Device**: A simple, reliable, and weather resistant hardware that connects to the Internet, request its location from locationmagic.org, and sends its location `DEVICE_LOCATION` every "n" seconds to a cloud-hosted postgres database.
+- **Backend**: A `postgres database` with appropriate tables to receive real-time device data along with static bus stop and route data. A simple query should allow for the display of the required information to to be displayed on a static frontend page.
+- **Frontend**: A static single page application that can run on any smartphone. The page would request the user's current location and upon receiving it, send the `CLIENT_LOCATION` as a payload to an API endpoint.
+- **Endpoint**: An API endpoint that receives the `CLIENT_LOCATION` and returns top-n `DEVICE_LOCATIONs` closest to it at `TIME t` via a simple postgres spatial query. At the moment, we use AWS Lambda functions connected to an API Gateway to achieve this.
 
-### findDevice_lambda.py
-This is a script that runs on AWS. It uses the [Google Distance Matrix API](https://developers.google.com/maps/documentation/distance-matrix/start) to compute the distance between the client and the nearest bus. The script uses uses an API key from Varun's Google Cloud account 
+## What
 
-### locate_magic.sh
+### locate_magic.sh (Device)
+This script will run on a Raspberry Pi and obtain its location by pinging WIFI routers around it and sending it to an external service called Location Magic maintained by Unwired Labs. 
 Usage:
-- Open a terminal
-- if OSX `./locate_magic.sh osx` will return your current location.
-- if linux `./locate_magic.sh linux` will return your current location.
+- Obtain a token from locationmagic.org
+- if OSX `./locate_magic.sh osx` should return your current location.
+- if linux `./locate_magic.sh linux` should return your current location.
 
-### client-location-page.html
+### findDevice_lambda.py (Backend)
+This is a script that runs on Amazon Web Services. It uses the [Google Distance Matrix API](https://developers.google.com/maps/documentation/distance-matrix/start) to compute the distance between the client and the nearest bus.
+
+
+### client-location-page.html (Front End)
+This static page is hosted on http://vr00n.github.io/Bus-Lambda and requests your current location. The intention is to send your current location to an API endpoint that returns the top-n nearest buses.
+
 Usage: 
 - In the same directory as the html file `python -m SimpleHTTPServer 8888` will create a local webserver
 - Open a new browser window and type `http://localhost:8888/`.
@@ -67,7 +74,6 @@ Usage:
 - The page should ask you to `Allow for Location`. Please allow.
 - The page should then return your current location.
 
-This is v 0.1 of the client page that will send the `CLIENT_LOCATION` to the AWS API Endpoint.
 
 ### Further Reading
 
