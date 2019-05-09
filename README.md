@@ -6,7 +6,7 @@ Low-cost, real time tracking of buses.
 
 ![ Growing up in India, Varun would often find himself in these situations ](https://wricitieshub.org/sites/default/files/image4.jpg)
 
-Growing up in India, Varun would often find himself in these situations. In a country where public resources are either constrained or misallocated, simply knowing how far the next bus is could play a small part in improving the tranist experience and reducing life-threating overcrowding of buses and other forms of public transportation.
+Growing up in India, [Varun](https://uploads.knightlab.com/storymapjs/158f477ab79c7702de8c33b817ddae41/varun-resume/index.html) would often find himself in these situations. In a country where public resources are either constrained or misallocated, simply knowing how far the next bus is could play a small part in improving the overall tranist experience and mitigate the overcrowding of buses that could lead to life-threating situations. 
 
 Access to real-time transit information has been linked to  [overall satisfaction with transit service](http://trrjournalonline.trb.org/doi/abs/10.3141/2082-13), [increases in ridership](http://www.sciencedirect.com/science/article/pii/S0968090X12000022), and  [substantial increases in farebox revenue](http://www.sciencedirect.com/science/article/pii/S0968090X15000297). 
 
