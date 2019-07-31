@@ -28,15 +28,6 @@ function success(position) {
   mapcanvas.style.width = '100%';
 
   document.querySelector('article').appendChild(mapcanvas);
-
-  // var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  // var myOptions = {
-  //   zoom: 15,
-  //   center: latlng,
-  //   mapTypeControl: false,
-  //   navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
-  //   mapTypeId: google.maps.MapTypeId.ROADMAP
-  // };
   
   var lat = position.coords.latitude
   var long = position.coords.longitude
@@ -50,6 +41,39 @@ function success(position) {
     accessToken: 'pk.eyJ1IjoidmlzaGVsYXIiLCJhIjoiY2p1dWo0NHNkMGkxZDQzbzEzc3RxZ3VqYyJ9.fFXSO7ymu5SHD5aO059Buw'
   }).addTo(map);
   
+  // var circle = L.circle([lat, long], {
+  //   color: 'red',
+  //   fillColor: '#f03',
+  //   fillOpacity: 0.5,
+  //   radius: acc
+  // }).addTo(map);
+  
+  // var marker = L.marker([lat, long]).addTo(map);
+
+  const url='https://4x4x9a7f5a.execute-api.us-east-1.amazonaws.com/beta/time?route=A&lon=' + long +'&lat='+lat;
+
+  var loc = ""
+  //https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe/43881141
+  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+  fetch(proxyurl + url)
+  .then(response => response.json())
+  .then(data => {
+    var loc = data.back_loc.split(',');
+    var lat1 = loc[0]
+    var long1 = loc[1]
+
+    // console.log(lat)
+    add_map_point(lat, long, acc, map)
+    add_map_point(lat1, long1, 1, map)
+
+    // var long1 = data.back_loc;
+  })
+  .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
+
+}
+
+function add_map_point(lat, long, acc, map) {
+
   var circle = L.circle([lat, long], {
     color: 'red',
     fillColor: '#f03',
@@ -58,22 +82,12 @@ function success(position) {
   }).addTo(map);
   
   var marker = L.marker([lat, long]).addTo(map);
-
-  // DISPLAYS MAP - COMMENT OUT map and marker code to remove MAP
-  // var map = new google.maps.Map(document.getElementById("mapcanvas"), myOptions);
-
-  // var marker = new google.maps.Marker({
-  //     position: latlng,
-  //     map: map,
-  //     title:"You are here! (at least within a "+position.coords.accuracy+" meter radius)"
-  // });
 }
 
 function error(msg) {
   var s = document.querySelector('#status');
   s.innerHTML = typeof msg == 'string' ? msg : "failed";
   s.className = 'fail';
-
   // console.log(arguments);
 }
 
