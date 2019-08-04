@@ -1,13 +1,10 @@
-# https://4x4x9a7f5a.execute-api.us-east-1.amazonaws.com/beta/time?route=A&lon=-73.8887422822949&lat=40.6452239097308
-
 import argparse
 import psycopg2
 import json
 from datetime import datetime
-from sys import argv
 
-def main(argv):
-    print(argv)
+def main():
+    ###################################
     ### parse commandline arguments ###
     ###################################
     parser = argparse.ArgumentParser(description='parse arguments')
@@ -15,6 +12,7 @@ def main(argv):
     parser.add_argument('--timestamp', type=str, help='timestamp when the location info is sent')
     parser.add_argument('--location', type=str, help='json str containing lat and lon')
     args = vars(parser.parse_args())
+    print(args)
 
     ###################################
     ###   get location information  ###
@@ -29,25 +27,27 @@ def main(argv):
     ###################################
 
     timestamp = int(args['timestamp'])
-    date = datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    date = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    print(date)
 
     ###################################
     ###      insert data to db      ###
     ###################################
-    host = "refer lastpass"
-    database = "refer lastpass"
-    user = "refer lastpass"
-    password = "refer lastpass"
+    host = "buslambda.c8idj0wb3ddk.us-east-1.rds.amazonaws.com"
+    database = "buslambda"
+    user = "argomaster"
+    password = "xAb513GKHpyf92F6"
 
     con = psycopg2.connect(host=host, database=database, user=user, password=password)
     cur = con.cursor()
 
-    query = 'insert into bus.device_test (datetime, device_id, lat, lon) VALUES (%s, %s, %s, %s);'
-    cur.execute(query, (date, args['device_id'], lat, lon))
+    query = '''insert into bus.device_test (datetime, device_id, lat, lon) VALUES (%s, %s, %s, %s);'''
+    cur.execute(query, (str(date), args['device_id'], lat, lon))
+    cur.execute('''update bus.device_test set geom=st_SetSrid(st_MakePoint(cast(lon as float), cast(lat as float)), 4326);''')
+
     con.commit()
 
+
+
 if __name__ == '__main__':
-   if len(argv) == 7:
-       main(argv)
-   else:
-       print('Incorrect number of Arguments')
+   main()
