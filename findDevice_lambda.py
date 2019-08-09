@@ -35,10 +35,10 @@ def lambda_handler(event, context):
 
     try:
         
-        host = "buslambda.c8idj0wb3ddk.us-east-1.rds.amazonaws.com"
-        database = "buslambda"
-        user = "argomaster"
-        password = "xAb513GKHpyf92F6"
+        host = "last_pass"
+        database = "last_pass"
+        user = "last_pass"
+        password = "last_pass"
 
         con = psycopg2.connect(host=host, database=database, user=user, password=password)
         cur = con.cursor()
@@ -64,7 +64,7 @@ def lambda_handler(event, context):
         # time_result = req.json()['rows'][0]['elements'][0]['duration']['text']
         # return {'back_loc': str(back_lat)+","+str(back_lon),'bus_Time': str(back_time),'expected_time': time_result, 'device': back_device}
         #return event
-        API_KEY = 'AIzaSyDDD_l2yX8BhAQPlfQ5JY0-xNTlNcUvrT8'
+        API_KEY = 'last_pass'
         final_response = {"buses":[]}
         for entry in rows:
             url = ('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&' +
