@@ -29,6 +29,8 @@ function success(position) {
 
   document.querySelector('article').appendChild(mapcanvas);
 
+  // var lat = 40.721573
+  // var long = -73.984044
   var lat = position.coords.latitude
   var long = position.coords.longitude
   var acc = position.coords.accuracy
@@ -41,15 +43,6 @@ function success(position) {
     accessToken: 'pk.eyJ1IjoidmlzaGVsYXIiLCJhIjoiY2p1dWo0NHNkMGkxZDQzbzEzc3RxZ3VqYyJ9.fFXSO7ymu5SHD5aO059Buw'
   }).addTo(map);
 
-  // var circle = L.circle([lat, long], {
-  //   color: 'red',
-  //   fillColor: '#f03',
-  //   fillOpacity: 0.5,
-  //   radius: acc
-  // }).addTo(map);
-
-  // var marker = L.marker([lat, long]).addTo(map);
-
   const url='https://4x4x9a7f5a.execute-api.us-east-1.amazonaws.com/beta/time?route=A&lon=' + long +'&lat='+lat;
 
   var loc = ""
@@ -58,15 +51,15 @@ function success(position) {
   fetch(proxyurl + url)
   .then(response => response.json())
   .then(data => {
-
     add_map_point(lat, long, acc, map, user=true)
 
-    var loc = data.back_loc.split(',');
-    var lat1 = loc[0]
-    var long1 = loc[1]
-    add_map_point(lat1, long1, 1, map, user=false)
+    for (bus of data.buses){
+      var loc = bus.back_loc.split(',');
+      var lat1 = loc[0]
+      var long1 = loc[1]
+      add_map_point(lat1, long1, 1, map, user=false)
+    }
 
-    // var long1 = data.back_loc;
   })
   .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
 
@@ -79,7 +72,6 @@ function add_map_point(lat, long, acc, map, user) {
       iconUrl: 'bus.svg',
       iconSize: [25, 75], // size of the icon
       });
-
 
   if (user) {
     var circle = L.circle([lat, long], {
