@@ -20,8 +20,7 @@ def lambda_handler(event, context):
     querytext = ('''SELECT DISTINCT ON (device_id)
      datetime AS recenttime, ST_X(geom) as back_lon, ST_Y(geom) as back_lat, device_id
      FROM   bus.device_test
-     WHERE ST_Distance_Sphere(geom, ST_MakePoint({0},{1})) > 0.1 * 1609.34
-     AND ST_Distance_Sphere(geom, ST_MakePoint({0},{1})) <= 10 * 1609.34
+     WHERE ST_Distance_Sphere(geom, ST_MakePoint({0},{1})) <= 10 * 1609.34
      AND datetime >= now()::timestamp - interval '10 days'
      ORDER  BY device_id, recenttime DESC
      LIMIT 5;'''.format(event['lon'], event['lat']))
