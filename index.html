@@ -34,7 +34,7 @@ function success(position) {
   var lat = position.coords.latitude
   var long = position.coords.longitude
   var acc = position.coords.accuracy
-  var map = L.map('mapcanvas').setView([lat, long], 4);
+  var map = L.map('mapcanvas').setView([lat, long], 12);
 
   console.log(acc)
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
