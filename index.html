@@ -36,6 +36,7 @@ function success(position) {
   var acc = position.coords.accuracy
   var map = L.map('mapcanvas').setView([lat, long], 10);
 
+  console.log(acc)
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
@@ -74,11 +75,39 @@ function add_map_point(lat, long, acc, map, user) {
       });
 
   if (user) {
-    var circle = L.circle([lat, long], {
+    var acc_circle = L.circle([lat, long], {
       color: 'red',
       fillColor: '#f03',
       fillOpacity: 0.5,
       radius: acc
+    }).addTo(map);
+
+    var circle1 = L.circle([lat, long], {
+      color: '#B99E70',
+      opacity: 0.5,
+      weight: 8,
+      fillColor: '#f03',
+      fillOpacity: 0.2,
+      width: .5,
+      radius: 321
+    }).addTo(map);
+
+    var circle2 = L.circle([lat, long], {
+      color: '#B99E70',
+      opacity: 0.5,
+      weight: 8,
+      fillColor: '#EBED7C',
+      fillOpacity: 0.5,
+      width: .5,
+      radius: 482
+    }).addTo(map);
+
+    var circle3 = L.circle([lat, long], {
+      color: '#B99E70',
+      opacity: 0.5,
+      weight: 8,
+      fillOpacity: 0.0,
+      radius: 643
     }).addTo(map);
 
     var marker = L.marker([lat, long]).addTo(map);
