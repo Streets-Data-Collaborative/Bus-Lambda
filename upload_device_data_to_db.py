@@ -33,10 +33,10 @@ def main():
     ###################################
     ###      insert data to db      ###
     ###################################
-    host = "refer lastpass"
-    database = "refer lastpass"
-    user = "refer lastpass"
-    password = "refer lastpass"
+    host = "buslambda2.c8idj0wb3ddk.us-east-1.rds.amazonaws.com"
+    database = "buslambda"
+    user = "argomaster"
+    password = "xAb513GKHpyf92F6"
 
 
     con = psycopg2.connect(host=host, database=database, user=user, password=password)
