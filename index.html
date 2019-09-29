@@ -51,13 +51,15 @@ function success(position) {
   fetch(proxyurl + url)
   .then(response => response.json())
   .then(data => {
-    add_map_point(lat, long, acc, map, user=true)
-    console.log(data)
+    add_user_point(lat, long, acc, map)
     for (bus of data.buses){
       var loc = bus.back_loc.split(',');
       var lat1 = loc[0]
       var long1 = loc[1]
-      add_map_point(lat1, long1, 1, map, user=false)
+      var device = bus.device
+      var time_req = bus.expected_time
+      var route = bus.route
+      add_bus_point(lat1, long1, device, time_req, route, map)
     }
 
   })
@@ -65,54 +67,67 @@ function success(position) {
 
 }
 
-function add_map_point(lat, long, acc, map, user) {
+function add_user_point(lat, long, acc, map) {
 
-  // create custom icon
-  var busIcon = L.icon({
+	var acc_circle = L.circle([lat, long], {
+	  color: 'red',
+	  fillColor: '#f03',
+	  fillOpacity: 0.5,
+	  radius: acc
+	}).addTo(map);
+
+	var circle1 = L.circle([lat, long], {
+	  color: '#B99E70',
+	  opacity: 0.5,
+	  weight: 8,
+	  fillColor: '#f03',
+	  fillOpacity: 0.2,
+	  width: .5,
+	  radius: 321
+	}).addTo(map);
+
+	var circle2 = L.circle([lat, long], {
+	  color: '#B99E70',
+	  opacity: 0.5,
+	  weight: 8,
+	  fillColor: '#EBED7C',
+	  fillOpacity: 0.5,
+	  width: .5,
+	  radius: 482
+	}).addTo(map);
+
+	var circle3 = L.circle([lat, long], {
+	  color: '#B99E70',
+	  opacity: 0.5,
+	  weight: 8,
+	  fillOpacity: 0.0,
+	  radius: 643
+	}).addTo(map);
+
+	var marker = L.marker([lat, long]).addTo(map);
+} 
+
+function add_bus_point(lat, long, device, time_req, route, map) {
+
+  	// create custom icon
+  	var busIcon = L.icon({
       iconUrl: 'bus.svg',
       iconSize: [25, 75], // size of the icon
       });
 
-  if (user) {
-    var acc_circle = L.circle([lat, long], {
-      color: 'red',
-      fillColor: '#f03',
-      fillOpacity: 0.5,
-      radius: acc
-    }).addTo(map);
+  	var marker = L.marker([lat, long], {icon: busIcon}).addTo(map);
+  	var list = "<dl><dt><b>Bus: </b>" + device + "</dt>"
+           + "<dt><b>Route: </b>" + route + "</dt>"
+           + "<dt><b>Time Required: </b>" + time_req + "</dt></dl>"
 
-    var circle1 = L.circle([lat, long], {
-      color: '#B99E70',
-      opacity: 0.5,
-      weight: 8,
-      fillColor: '#f03',
-      fillOpacity: 0.2,
-      width: .5,
-      radius: 321
-    }).addTo(map);
-
-    var circle2 = L.circle([lat, long], {
-      color: '#B99E70',
-      opacity: 0.5,
-      weight: 8,
-      fillColor: '#EBED7C',
-      fillOpacity: 0.5,
-      width: .5,
-      radius: 482
-    }).addTo(map);
-
-    var circle3 = L.circle([lat, long], {
-      color: '#B99E70',
-      opacity: 0.5,
-      weight: 8,
-      fillOpacity: 0.0,
-      radius: 643
-    }).addTo(map);
-
-    var marker = L.marker([lat, long]).addTo(map);
-  } else {
-      var marker = L.marker([lat, long], {icon: busIcon}).addTo(map);
-  }
+	marker.bindPopup(list);
+  	// marker.bindPopup("Bus - " + device + "\nRoute - " + route + "\nExpected Time - " + time_req);
+	marker.on('mouseover', function (e) {
+    	this.openPopup();
+	});
+	marker.on('mouseout', function (e) {
+   		this.closePopup();
+	});
 }
 
 function error(msg) {
