@@ -117,8 +117,8 @@ function add_bus_point(lat, long, device, time_req, route, map) {
 
   	var marker = L.marker([lat, long], {icon: busIcon}).addTo(map);
   	var list = "<dl><dt><b>Bus: </b>" + device + "</dt>"
-           + "<dt><b>Route: </b>" + route + "</dt>"
-           + "<dt><b>Time Required: </b>" + time_req + "</dt></dl>"
+           + "<dt><b>Route: </b>" + route + "</dt></dl>"
+           // + "<dt><b>Time Required: </b>" + time_req + "</dt></dl>"
 
 	marker.bindPopup(list);
   	// marker.bindPopup("Bus - " + device + "\nRoute - " + route + "\nExpected Time - " + time_req);
