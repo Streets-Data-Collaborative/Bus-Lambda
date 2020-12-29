@@ -4,7 +4,7 @@ Low-cost, real time tracking of buses.
 ## Why
 
 
-![ Growing up in India, Varun would often find himself in these situations ](https://wricitieshub.org/sites/default/files/image4.jpg)
+![ Growing up in India, Varun would often find himself in these situations ](https://raw.githubusercontent.com/Streets-Data-Collaborative/Bus-Lambda/master/48764060387_a7205a5c01_o.jpg)
 
 Growing up in India, [Varun](https://uploads.knightlab.com/storymapjs/158f477ab79c7702de8c33b817ddae41/varun-resume/index.html) would often find himself in these situations. In a country where public resources are either constrained or misallocated, simply knowing how far the next bus is could play a small part in improving the overall tranist experience and mitigate the overcrowding of buses that could lead to life-threating situations. 
 
